@@ -2,6 +2,8 @@
  * Health check endpoint for monitoring
  */
 exports.handler = async () => {
+  const maxSlides = parseInt(process.env.MAX_SLIDES || '10', 10);
+  
   return {
     statusCode: 200,
     headers: {
@@ -15,7 +17,7 @@ exports.handler = async () => {
       features: {
         documentParsing: ['pdf', 'docx', 'txt'],
         slideGeneration: true,
-        maxSlides: 10
+        maxSlides: maxSlides
       }
     })
   };
