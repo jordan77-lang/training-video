@@ -54,22 +54,73 @@ This will start a local server at `http://localhost:8888`
 A sample training document is provided in the `examples/` directory for testing:
 - `examples/sample-training.txt` - Space Operations Protocol training document
 
+## Architecture
+
+```
+┌─────────────────┐
+│   Web Browser   │
+│  (Frontend UI)  │
+└────────┬────────┘
+         │ HTTP POST
+         │ (Multipart Form Data)
+         ▼
+┌─────────────────────────────┐
+│   Netlify Function          │
+│   /api/upload               │
+└────────┬────────────────────┘
+         │
+         ▼
+┌─────────────────────────────┐
+│   Document Parser           │
+│   - PDF (pdf-parse)         │
+│   - DOCX (mammoth)          │
+│   - TXT (native)            │
+└────────┬────────────────────┘
+         │ Raw Text
+         ▼
+┌─────────────────────────────┐
+│   Text Summarizer           │
+│   - Extract key points      │
+│   - Identify main topics    │
+└────────┬────────────────────┘
+         │ Key Points Array
+         ▼
+┌─────────────────────────────┐
+│   Slide Generator           │
+│   - Canvas rendering        │
+│   - 1280x720 PNG output     │
+└────────┬────────────────────┘
+         │ Base64 Images
+         ▼
+┌─────────────────────────────┐
+│   JSON Response             │
+│   - Slides with images      │
+│   - Metadata                │
+└─────────────────────────────┘
+```
+
 ## Project Structure
 
 ```
 training-video/
 ├── netlify/
 │   └── functions/
-│       └── upload.js          # Serverless function for file upload
+│       ├── upload.js          # Serverless function for file upload
+│       └── health.js          # Health check endpoint
 ├── public/
-│   └── index.html             # Web interface
+│   ├── index.html             # Main web interface
+│   └── status.html            # System status page
 ├── src/
 │   └── utils/
 │       ├── documentParser.js  # Document text extraction
 │       ├── textSummarizer.js  # Text summarization logic
 │       └── videoGenerator.js  # Slide/video generation
+├── examples/
+│   └── sample-training.txt    # Sample training document
 ├── netlify.toml               # Netlify configuration
 ├── package.json               # Dependencies and scripts
+├── DEPLOYMENT.md              # Deployment guide
+├── CONTRIBUTING.md            # Contribution guidelines
 └── README.md                  # This file
 ```
 
@@ -91,6 +142,25 @@ netlify deploy --prod
 ```
 
 ## API Endpoints
+
+### GET /api/health
+
+Health check endpoint for monitoring.
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "training-video-generator",
+  "version": "1.0.0",
+  "timestamp": "2025-10-15T21:30:00.000Z",
+  "features": {
+    "documentParsing": ["pdf", "docx", "txt"],
+    "slideGeneration": true,
+    "maxSlides": 10
+  }
+}
+```
 
 ### POST /api/upload
 
