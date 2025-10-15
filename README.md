@@ -49,6 +49,11 @@ This will start a local server at `http://localhost:8888`
 4. Click "Generate Video Slides"
 5. View and download the generated slides
 
+### Example Files
+
+A sample training document is provided in the `examples/` directory for testing:
+- `examples/sample-training.txt` - Space Operations Protocol training document
+
 ## Project Structure
 
 ```
@@ -69,6 +74,10 @@ training-video/
 ```
 
 ## Deployment to Netlify
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
+
+**Quick start:**
 
 1. Push your code to GitHub
 2. Connect your repository to Netlify
@@ -141,10 +150,10 @@ The project uses the following default settings:
 - [ ] Video export with transitions
 - [ ] Batch processing support
 
+## Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
 ## License
 
 ISC
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
